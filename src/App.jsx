@@ -83,9 +83,10 @@ const Form = ({ ...rest }) => {
     interval.current = setInterval(() => {
       const d = new Date();
       const m = d.getMinutes();
-      pieces.forEach((p) => {
-        if (intToTimeString(p.startMinute, startTime) === `${d.getHours()}:${m < 10 ? `0${m}` : m}`) {
-          notify(`Hey! ${p}`);
+      const s = d.getSeconds();
+      pieces.forEach((p, i) => {
+        if (s === 0 && intToTimeString(p.startMinute, startTime) === `${d.getHours()}:${m < 10 ? `0${m}` : m}`) {
+          notify(`Hey! ${i % 2 === 1 ? 'Time to open your eyes.' : 'Time to work.'} ${p.text}`);
         }
       });
     }, 1000);
