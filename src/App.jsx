@@ -1,8 +1,13 @@
 import React from 'react';
 // import logo from './logo.svg';
 import './App.css';
+import { Howl, Howler } from 'howler';
 import Piece from './Piece';
 import { intToTimeString, timeStringToInt } from './utils';
+
+const sound = new Howl({
+  src: ['service-bell_daniel_simion.mp3'],
+});
 
 const Bar = ({ pieces, onPiecesChange, startTime }) => (
   <div>
@@ -86,6 +91,7 @@ const Form = ({ ...rest }) => {
       const s = d.getSeconds();
       pieces.forEach((p, i) => {
         if (s === 0 && intToTimeString(p.startMinute, startTime) === `${d.getHours()}:${m < 10 ? `0${m}` : m}`) {
+          sound.play();
           notify(`Hey! ${i % 2 === 1 ? 'Time to open your eyes.' : 'Time to work.'} ${p.text}`);
         }
       });
