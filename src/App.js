@@ -8,7 +8,7 @@ import './App.css';
  */
 const timeStringToInt = (s) => {
   const [p1, p2] = s.split(':');
-  return parseInt(p1) * 60 + parseInt(p2);
+  return parseInt(p1, 10) * 60 + parseInt(p2, 10);
 };
 
 const intToTimeString = (x, baseTime) => {
@@ -22,7 +22,7 @@ const intToTimeString = (x, baseTime) => {
 
     // debugger;
     if (m / 60 >= 1) {
-      ++h;
+      h += 1;
       m -= 60;
     }
 
