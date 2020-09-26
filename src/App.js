@@ -13,8 +13,25 @@ const timeStringToInt = (s) => {
 
 const intToTimeString = (x, baseTime) => {
   if (baseTime) {
-    // TODO:
-    const offset = timeStringToInt(baseTime);
+    let y = timeStringToInt(baseTime);
+    let h = (y / 60);
+    let m = (y % 60);
+
+    h += x / 60;
+    m += x % 60;
+
+    // debugger;
+    if (m / 60 >= 1) {
+      ++h;
+      m -= 60;
+    }
+
+    h = Math.floor(h).toFixed(0);
+    m = Math.floor(m).toFixed(0);
+
+    const mm = m < 10 ? '0' + m : m;
+
+    return h + ':' + mm;
   }
 
   const h = (x / 60).toFixed(0);
@@ -32,7 +49,7 @@ const Piece = ({doDelete, doMoveUp, doMoveDown, onChange, value, startTime}) => 
     <button onClick={doDelete}>&times;</button>
     <button onClick={doMoveUp}>Up</button>
     <button onClick={doMoveDown}>Down</button>
-<p><em>Time:</em> {value.startMinute ? intToTimeString(value.startMinute, startTime) : intToTimeString(0)}</p>
+<p><em>Time:</em> {value.startMinute > -1 ? intToTimeString(value.startMinute, startTime) : intToTimeString(0, startTime)}</p>
 
     {editing ? (
       <>
@@ -58,7 +75,7 @@ const Bar = ({pieces, onPiecesChange, startTime}) => {
 
   return (<div>
     <button onClick={() => {
-      onPiecesChange([...pieces, {text: ''}]);
+      onPiecesChange([...pieces, {text: '', startMinute: -1}]);
     }}>Add new piece</button>
 
     <div className="bar">
@@ -148,7 +165,7 @@ const Form = ({ ...rest }) => {
       let crtIdx = 0;
       let crtMin = 0;
       while (true) {
-        np[crtIdx].startMinute = timeStringToInt(startTime) + crtMin;
+        np[crtIdx].startMinute =/*  timeStringToInt(startTime) +  */crtMin;
         const duration = crtIdx % 2 === 1 ? pauseDuration : normalDuration;
 
         np[crtIdx].endMinute = np[crtIdx].startMinute + duration;
