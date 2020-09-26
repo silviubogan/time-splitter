@@ -13,7 +13,7 @@ const timeStringToInt = (s) => {
 
 const intToTimeString = (x, baseTime) => {
   if (baseTime) {
-    let y = timeStringToInt(baseTime);
+    const y = timeStringToInt(baseTime);
     let h = (y / 60);
     let m = (y % 60);
 
@@ -29,83 +29,117 @@ const intToTimeString = (x, baseTime) => {
     h = Math.floor(h).toFixed(0);
     m = Math.floor(m).toFixed(0);
 
-    const mm = m < 10 ? '0' + m : m;
+    const mm = m < 10 ? `0${m}` : m;
 
-    return h + ':' + mm;
+    return `${h}:${mm}`;
   }
 
   const h = (x / 60).toFixed(0);
   const m = (x % 60).toFixed(0);
 
-  const mm = m < 10 ? '0' + m : m;
+  const mm = m < 10 ? `0${m}` : m;
 
-  return h + ':' + mm;
+  return `${h}:${mm}`;
 };
 
-const Piece = ({doDelete, doMoveUp, doMoveDown, onChange, value, startTime, index}) => {
+const Piece = ({
+  doDelete, doMoveUp, doMoveDown, onChange, value, startTime, index,
+}) => {
   const [editing, setEditing] = React.useState(false);
 
-  return (<div className="piece">
-    {index % 2 === 0 && <h2>{index / 2 + 1}.</h2>}
-    <button onClick={doDelete}>&times;</button>
-    <button onClick={doMoveUp}>Up</button>
-    <button onClick={doMoveDown}>Down</button>
-<p><em>Time:</em> {value.startMinute > -1 ? intToTimeString(value.startMinute, startTime) : intToTimeString(0, startTime)}</p>
+  return (
+    <div className="piece">
+      {index % 2 === 0 && (
+      <h2>
+        {index / 2 + 1}
+        .
+      </h2>
+      )}
+      <button onClick={doDelete}>&times;</button>
+      <button onClick={doMoveUp}>Up</button>
+      <button onClick={doMoveDown}>Down</button>
+      <p>
+        <em>Time:</em>
+        {' '}
+        {value.startMinute > -1 ? intToTimeString(value.startMinute, startTime) : intToTimeString(0, startTime)}
+      </p>
 
-    {editing ? (
-      <>
-        <button onClick={() => {
-          setEditing(false);
-        }}>Back</button>
-        <input type="text" placeholder="Type here..." value={value.text} onChange={(ev) => {
-          onChange({ text: ev.target.value });
-        }}/>
-      </>
+      {editing ? (
+        <>
+          <button onClick={() => {
+            setEditing(false);
+          }}
+          >
+            Back
+          </button>
+          <input
+            type="text"
+            placeholder="Type here..."
+            value={value.text}
+            onChange={(ev) => {
+              onChange({ text: ev.target.value });
+            }}
+          />
+        </>
       ) : (
         <>
-       <button onClick={() => {
-         setEditing(true);
-       }}>Edit</button>
-      <p>{value.text.length > 0 ? value.text : (<em>Empty</em>)}</p>
-      </>
-    )}
-  </div>);
+          <button onClick={() => {
+            setEditing(true);
+          }}
+          >
+            Edit
+          </button>
+          <p>{value.text.length > 0 ? value.text : (<em>Empty</em>)}</p>
+        </>
+      )}
+    </div>
+  );
 };
 
-const Bar = ({pieces, onPiecesChange, startTime}) => {
-
-  return (<div>
+const Bar = ({ pieces, onPiecesChange, startTime }) => (
+  <div>
     <button onClick={() => {
-      onPiecesChange([...pieces, {text: '', startMinute: -1}]);
-    }}>Add new piece</button>
+      onPiecesChange([...pieces, { text: '', startMinute: -1 }]);
+    }}
+    >
+      Add new piece
+    </button>
 
     <div className="bar">
-    {pieces.map((p, i) => {
-      return (<Piece index={i} doDelete={() => {
-        onPiecesChange(pieces.filter((x) => x !== p));
-      }} doMoveDown={() => {
-        const arr = [...pieces];
-        const aux = pieces[pieces.indexOf(p)];
-        arr[pieces.indexOf(p)] = arr[pieces.indexOf(p) - 1];
-        arr[pieces.indexOf(p) - 1] = aux;
-        onPiecesChange(arr);
-      }} doMoveUp={() => {
-        const arr = [...pieces];
-        const aux = arr[pieces.indexOf(p) - 1];
-        arr[pieces.indexOf(p) - 1] = arr[pieces.indexOf(p)];
-        arr[pieces.indexOf(p)] = aux;
-        onPiecesChange(arr);
-      }} onChange={(val) => {
-        const arr = [...pieces];
-        arr[arr.indexOf(p)] = {
-          ...val
-        };
-        onPiecesChange(arr);
-      }} value={p} startTime={startTime}></Piece>);
-    })}
+      {pieces.map((p, i) => (
+        <Piece
+          index={i}
+          doDelete={() => {
+            onPiecesChange(pieces.filter((x) => x !== p));
+          }}
+          doMoveDown={() => {
+            const arr = [...pieces];
+            const aux = pieces[pieces.indexOf(p)];
+            arr[pieces.indexOf(p)] = arr[pieces.indexOf(p) - 1];
+            arr[pieces.indexOf(p) - 1] = aux;
+            onPiecesChange(arr);
+          }}
+          doMoveUp={() => {
+            const arr = [...pieces];
+            const aux = arr[pieces.indexOf(p) - 1];
+            arr[pieces.indexOf(p) - 1] = arr[pieces.indexOf(p)];
+            arr[pieces.indexOf(p)] = aux;
+            onPiecesChange(arr);
+          }}
+          onChange={(val) => {
+            const arr = [...pieces];
+            arr[arr.indexOf(p)] = {
+              ...val,
+            };
+            onPiecesChange(arr);
+          }}
+          value={p}
+          startTime={startTime}
+        />
+      ))}
     </div>
-  </div>);
-};
+  </div>
+);
 
 // TODO: reordering does not work
 
@@ -117,45 +151,62 @@ const Form = ({ ...rest }) => {
   const [output, setOutput] = React.useState('');
   const [totalTime, setTotalTime] = React.useState(0);
 
-  return <div>
-    <label>
-      Start:
-    <input type="time" onChange={(val) => {
-      setStartTime(val.target.value);
-      localStorage.setItem('startTime', val.target.value);
-    }} value={startTime}></input>
-    </label>
-    <label>
-      End:
-    <input type="time" onChange={(val) => {
-      setEndTime(val.target.value);
-      localStorage.setItem('endTime', val.target.value);
-    }} value={endTime}></input>
-    </label>
-    <label>
-      Total Pause Duration:
-    <input type="time" onChange={(val) => {
-      setTotalPauseDuration(val.target.value);
-      localStorage.setItem('totalPauseDuration', val.target.value);
-    }} value={totalPauseDuration}></input>
-    </label>
-    <Bar pieces={pieces} onPiecesChange={(ps) => {
-      setPieces(ps);
-      localStorage.setItem('data', JSON.stringify(ps));
-    }} startTime={startTime}></Bar>
-    <button onClick={() => {
-      if (typeof startTime === 'number' || typeof endTime === 'number') {
-        alert('Error: invalid times selected');
-        return;
-      }
-      const minutes = timeStringToInt(endTime) - timeStringToInt(startTime);
-      setTotalTime((minutes / 60).toString() + ' h');
+  return (
+    <div>
+      <label>
+        Start:
+        <input
+          type="time"
+          onChange={(val) => {
+            setStartTime(val.target.value);
+            localStorage.setItem('startTime', val.target.value);
+          }}
+          value={startTime}
+        />
+      </label>
+      <label>
+        End:
+        <input
+          type="time"
+          onChange={(val) => {
+            setEndTime(val.target.value);
+            localStorage.setItem('endTime', val.target.value);
+          }}
+          value={endTime}
+        />
+      </label>
+      <label>
+        Total Pause Duration:
+        <input
+          type="time"
+          onChange={(val) => {
+            setTotalPauseDuration(val.target.value);
+            localStorage.setItem('totalPauseDuration', val.target.value);
+          }}
+          value={totalPauseDuration}
+        />
+      </label>
+      <Bar
+        pieces={pieces}
+        onPiecesChange={(ps) => {
+          setPieces(ps);
+          localStorage.setItem('data', JSON.stringify(ps));
+        }}
+        startTime={startTime}
+      />
+      <button onClick={() => {
+        if (typeof startTime === 'number' || typeof endTime === 'number') {
+          alert('Error: invalid times selected');
+          return;
+        }
+        const minutes = timeStringToInt(endTime) - timeStringToInt(startTime);
+        setTotalTime(`${(minutes / 60).toString()} h`);
 
-      // const perPiece = minutes / pieces.length;
+        // const perPiece = minutes / pieces.length;
 
-      const np = [...pieces];
+        const np = [...pieces];
 
-      const intTotalPauseDuration = timeStringToInt(totalPauseDuration);
+        const intTotalPauseDuration = timeStringToInt(totalPauseDuration);
         const pauseCount = np.length / 2;
         const pauseDuration = intTotalPauseDuration / pauseCount;
 
@@ -163,34 +214,41 @@ const Form = ({ ...rest }) => {
         const workCount = np.length / 2;
         const normalDuration = totalWorkDuration / workCount;
 
-      let crtIdx = 0;
-      let crtMin = 0;
-      while (true) {
-        np[crtIdx].startMinute =/*  timeStringToInt(startTime) +  */crtMin;
-        const duration = crtIdx % 2 === 1 ? pauseDuration : normalDuration;
+        let crtIdx = 0;
+        let crtMin = 0;
+        while (true) {
+          np[crtIdx].startMinute =/*  timeStringToInt(startTime) +  */crtMin;
+          const duration = crtIdx % 2 === 1 ? pauseDuration : normalDuration;
 
-        np[crtIdx].endMinute = np[crtIdx].startMinute + duration;
+          np[crtIdx].endMinute = np[crtIdx].startMinute + duration;
+
+          // debugger;
+
+          crtMin += duration;
+
+          ++crtIdx;
+          if (crtIdx >= np.length) {
+            break;
+          }
+        }
+
+        setPieces(np.map((x) => ({ ...x })));
 
         // debugger;
 
-        crtMin += duration;
-
-        ++crtIdx;
-        if (crtIdx >= np.length) {
-          break;
-        }
-      }
-
-      setPieces(np.map(x => {
-        return {...x};
-      }));
-
-      // debugger;
-
-      setOutput('Done at ' + new Date().toLocaleString());
-    }}>Compute times</button>
-    <p><em>{output}</em><br/>Total time: <strong>{totalTime}</strong></p>
-  </div>;
+        setOutput(`Done at ${new Date().toLocaleString()}`);
+      }}
+      >
+        Compute times
+      </button>
+      <p>
+        <em>{output}</em>
+        <br />
+        Total time:
+        <strong>{totalTime}</strong>
+      </p>
+    </div>
+  );
 };
 
 function App() {
@@ -207,7 +265,10 @@ function App() {
       <footer>
         <button onClick={() => {
           localStorage.clear();
-        }}>Clear all data</button>
+        }}
+        >
+          Clear all data
+        </button>
       </footer>
     </div>
   );
