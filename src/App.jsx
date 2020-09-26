@@ -59,6 +59,38 @@ const Form = ({ ...rest }) => {
   const [output, setOutput] = React.useState('');
   const [totalTime, setTotalTime] = React.useState(0);
 
+  const notify = React.useCallback((txt) => {
+    if (Notification.permission === 'granted') {
+      // If it's okay let's create a notification
+      const notification = new Notification(txt);
+    }
+    // Otherwise, we need to ask the user for permission
+    else if (Notification.permission !== 'denied') {
+      Notification.requestPermission().then((permission) => {
+        // If the user accepts, let's create a notification
+        if (permission === 'granted') {
+          const notification = new Notification(txt);
+        }
+      });
+    }
+  }, []);
+
+  const interval = React.useRef(null);
+  React.useEffect(() => {
+    if (interval.current) {
+      clearInterval(interval.current);
+    }
+    interval.current = setInterval(() => {
+      const d = new Date();
+      const m = d.getMinutes();
+      pieces.forEach((p) => {
+        if (intToTimeString(p.startMinute, startTime) === `${d.getHours()}:${m < 10 ? `0${m}` : m}`) {
+          notify(`Hey! ${p}`);
+        }
+      });
+    }, 1000);
+  }, [pieces]);
+
   return (
     <div>
       <label>
