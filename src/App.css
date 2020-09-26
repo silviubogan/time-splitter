@@ -39,6 +39,10 @@
  background-color: rgb(0, 0, 54);
 }
 
+.piece:nth-child(even) {
+  background-color: black;
+}
+
 .bar {
 
 }

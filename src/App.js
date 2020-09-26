@@ -42,10 +42,11 @@ const intToTimeString = (x, baseTime) => {
   return h + ':' + mm;
 };
 
-const Piece = ({doDelete, doMoveUp, doMoveDown, onChange, value, startTime}) => {
+const Piece = ({doDelete, doMoveUp, doMoveDown, onChange, value, startTime, index}) => {
   const [editing, setEditing] = React.useState(false);
 
   return (<div className="piece">
+    {index % 2 === 0 && <h2>{index / 2 + 1}.</h2>}
     <button onClick={doDelete}>&times;</button>
     <button onClick={doMoveUp}>Up</button>
     <button onClick={doMoveDown}>Down</button>
@@ -79,8 +80,8 @@ const Bar = ({pieces, onPiecesChange, startTime}) => {
     }}>Add new piece</button>
 
     <div className="bar">
-    {pieces.map((p) => {
-      return (<Piece doDelete={() => {
+    {pieces.map((p, i) => {
+      return (<Piece index={i} doDelete={() => {
         onPiecesChange(pieces.filter((x) => x !== p));
       }} doMoveDown={() => {
         const arr = [...pieces];
