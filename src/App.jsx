@@ -2,9 +2,9 @@ import React from 'react';
 // import logo from './logo.svg';
 import './App.css';
 import { Howl, Howler } from 'howler';
+import { Button, Grid } from 'semantic-ui-react';
 import Piece from './Piece';
 import { intToTimeString, timeStringToInt } from './utils';
-import { Button, Grid } from 'semantic-ui-react';
 import 'semantic-ui-css/semantic.min.css';
 
 const sound = new Howl({
@@ -24,38 +24,38 @@ const Bar = ({ pieces, onPiecesChange, startTime }) => (
       {pieces.map((p, i) => (
         <Grid.Column>
 
-        <Piece
-          index={i}
-          doDelete={() => {
-            onPiecesChange(pieces.filter((x) => x !== p));
-          }}
-          doMoveDown={() => {
-            const arr = [...pieces];
-            const aux = pieces[pieces.indexOf(p)];
-            arr[pieces.indexOf(p)] = arr[pieces.indexOf(p) - 1];
-            arr[pieces.indexOf(p) - 1] = aux;
-            onPiecesChange(arr);
-          }}
-          doMoveUp={() => {
-            const arr = [...pieces];
-            const aux = arr[pieces.indexOf(p) - 1];
-            arr[pieces.indexOf(p) - 1] = arr[pieces.indexOf(p)];
-            arr[pieces.indexOf(p)] = aux;
-            onPiecesChange(arr);
-          }}
-          onChange={(val) => {
-            const arr = [...pieces];
-            arr[arr.indexOf(p)] = {
-              ...val,
-            };
-            onPiecesChange(arr);
-          }}
-          value={p}
-          startTime={startTime}
-        />
-      </Grid.Column>
+          <Piece
+            index={i}
+            doDelete={() => {
+              onPiecesChange(pieces.filter((x) => x !== p));
+            }}
+            doMoveDown={() => {
+              const arr = [...pieces];
+              const aux = pieces[pieces.indexOf(p)];
+              arr[pieces.indexOf(p)] = arr[pieces.indexOf(p) - 1];
+              arr[pieces.indexOf(p) - 1] = aux;
+              onPiecesChange(arr);
+            }}
+            doMoveUp={() => {
+              const arr = [...pieces];
+              const aux = arr[pieces.indexOf(p) - 1];
+              arr[pieces.indexOf(p) - 1] = arr[pieces.indexOf(p)];
+              arr[pieces.indexOf(p)] = aux;
+              onPiecesChange(arr);
+            }}
+            onChange={(val) => {
+              const arr = [...pieces];
+              arr[arr.indexOf(p)] = {
+                ...val,
+              };
+              onPiecesChange(arr);
+            }}
+            value={p}
+            startTime={startTime}
+          />
+        </Grid.Column>
       ))}
-      </Grid>
+    </Grid>
   </div>
 );
 
