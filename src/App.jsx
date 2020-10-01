@@ -4,6 +4,8 @@ import './App.css';
 import { Howl, Howler } from 'howler';
 import Piece from './Piece';
 import { intToTimeString, timeStringToInt } from './utils';
+import { Button, Grid } from 'semantic-ui-react';
+import 'semantic-ui-css/semantic.min.css';
 
 const sound = new Howl({
   src: ['service-bell_daniel_simion.mp3'],
@@ -11,15 +13,17 @@ const sound = new Howl({
 
 const Bar = ({ pieces, onPiecesChange, startTime }) => (
   <div>
-    <button onClick={() => {
+    <Button onClick={() => {
       onPiecesChange([...pieces, { text: '', startMinute: -1 }]);
     }}
     >
       Add new piece
-    </button>
+    </Button>
 
-    <div className="bar">
+    <Grid columns={4} className="bar">
       {pieces.map((p, i) => (
+        <Grid.Column>
+
         <Piece
           index={i}
           doDelete={() => {
@@ -49,8 +53,9 @@ const Bar = ({ pieces, onPiecesChange, startTime }) => (
           value={p}
           startTime={startTime}
         />
+      </Grid.Column>
       ))}
-    </div>
+      </Grid>
   </div>
 );
 

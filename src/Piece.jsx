@@ -1,5 +1,6 @@
 import React from 'react';
 import { intToTimeString, timeStringToInt } from './utils';
+import { Button, Segment } from 'semantic-ui-react';
 
 const Piece = ({
   doDelete, doMoveUp, doMoveDown, onChange, value, startTime, index,
@@ -7,16 +8,16 @@ const Piece = ({
   const [editing, setEditing] = React.useState(false);
 
   return (
-    <div className="piece">
+    <Segment className="piece">
       {index % 2 === 0 && (
       <h2>
         {index / 2 + 1}
         .
       </h2>
       )}
-      <button onClick={doDelete}>&times;</button>
-      <button onClick={doMoveUp}>Up</button>
-      <button onClick={doMoveDown}>Down</button>
+      <Button onClick={doDelete}>&times;</Button>
+      <Button onClick={doMoveUp}>Up</Button>
+      <Button onClick={doMoveDown}>Down</Button>
       <p>
         <em>Time:</em>
         {' '}
@@ -25,12 +26,12 @@ const Piece = ({
 
       {editing ? (
         <>
-          <button onClick={() => {
+          <Button onClick={() => {
             setEditing(false);
           }}
           >
             Back
-          </button>
+          </Button>
           <input
             type="text"
             placeholder="Type here..."
@@ -42,16 +43,16 @@ const Piece = ({
         </>
       ) : (
         <>
-          <button onClick={() => {
+          <Button onClick={() => {
             setEditing(true);
           }}
           >
             Edit
-          </button>
+          </Button>
           <p>{value.text.length > 0 ? value.text : (<em>Empty</em>)}</p>
         </>
       )}
-    </div>
+    </Segment>
   );
 };
 
