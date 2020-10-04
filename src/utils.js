@@ -10,24 +10,34 @@ export const timeStringToInt = (s) => {
 export const intToTimeString = (x, baseTime) => {
   if (baseTime) {
     const y = timeStringToInt(baseTime);
-    let h = (y / 60);
-    let m = (y % 60);
+    // console.log('time string to int:', baseTime, y);
 
-    h += x / 60;
-    m += x % 60;
+    // // destructure the base time
+    // let h = (y / 60);
+    // let m = (y % 60);
 
-    // debugger;
-    if (m / 60 >= 1) {
-      h += 1;
-      m -= 60;
-    }
+    // h += x / 60;
+    // m += x % 60;
 
-    h = Math.floor(h).toFixed(0);
-    m = Math.floor(m).toFixed(0);
 
-    const mm = m < 10 ? `0${m}` : m;
+    const m = y + x;
 
-    return `${h}:${mm}`;
+    // // debugger;
+    // if (m / 60 >= 1) {
+    //   h += m / 60;
+    //   m -= m;
+    // }
+
+    // h = Math.floor(h).toFixed(0);
+    // m = Math.floor(m).toFixed(0);
+
+    const h = (Math.floor(m / 60)).toFixed(0);
+    const mm = (Math.floor(m % 60)).toFixed(0);
+    const mstr = mm < 10 ? `0${mm}` : mm;
+
+    console.log("Y", { y, m, h, mm, mstr });
+
+    return `${h}:${mstr}`;
   }
 
   const h = (x / 60).toFixed(0);

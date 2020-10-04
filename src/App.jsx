@@ -21,40 +21,43 @@ const Bar = ({ pieces, onPiecesChange, startTime }) => (
     </Button>
 
     <Grid columns={4} className="bar">
-      {pieces.map((p, i) => (
-        <Grid.Column>
+      {pieces.map((p, i) => {
+        // console.log(i, p);;
+        return (
+          <Grid.Column>
 
-          <Piece
-            index={i}
-            doDelete={() => {
-              onPiecesChange(pieces.filter((x) => x !== p));
-            }}
-            doMoveDown={() => {
-              const arr = [...pieces];
-              const aux = pieces[pieces.indexOf(p)];
-              arr[pieces.indexOf(p)] = arr[pieces.indexOf(p) - 1];
-              arr[pieces.indexOf(p) - 1] = aux;
-              onPiecesChange(arr);
-            }}
-            doMoveUp={() => {
-              const arr = [...pieces];
-              const aux = arr[pieces.indexOf(p) - 1];
-              arr[pieces.indexOf(p) - 1] = arr[pieces.indexOf(p)];
-              arr[pieces.indexOf(p)] = aux;
-              onPiecesChange(arr);
-            }}
-            onChange={(val) => {
-              const arr = [...pieces];
-              arr[arr.indexOf(p)] = {
-                ...val,
-              };
-              onPiecesChange(arr);
-            }}
-            value={p}
-            startTime={startTime}
-          />
-        </Grid.Column>
-      ))}
+            <Piece
+              index={i}
+              doDelete={() => {
+                onPiecesChange(pieces.filter((x) => x !== p));
+              }}
+              doMoveDown={() => {
+                const arr = [...pieces];
+                const aux = pieces[pieces.indexOf(p)];
+                arr[pieces.indexOf(p)] = arr[pieces.indexOf(p) - 1];
+                arr[pieces.indexOf(p) - 1] = aux;
+                onPiecesChange(arr);
+              }}
+              doMoveUp={() => {
+                const arr = [...pieces];
+                const aux = arr[pieces.indexOf(p) - 1];
+                arr[pieces.indexOf(p) - 1] = arr[pieces.indexOf(p)];
+                arr[pieces.indexOf(p)] = aux;
+                onPiecesChange(arr);
+              }}
+              onChange={(val) => {
+                const arr = [...pieces];
+                arr[arr.indexOf(p)] = {
+                  ...val,
+                };
+                onPiecesChange(arr);
+              }}
+              value={p}
+              startTime={startTime}
+            />
+          </Grid.Column>
+        );
+      })}
     </Grid>
   </div>
 );
@@ -103,6 +106,51 @@ const Form = ({ ...rest }) => {
     }, 1000);
   }, [pieces]);
 
+  const computeTimes = React.useCallback(() => {
+    if (typeof startTime === 'number' || typeof endTime === 'number') {
+      alert('Error: invalid times selected');
+      return;
+    }
+    const minutes = timeStringToInt(endTime) - timeStringToInt(startTime);
+    setTotalTime(`${(minutes / 60).toString()} h`);
+
+    // const perPiece = minutes / pieces.length;
+
+    const np = [...pieces];
+
+    const intTotalPauseDuration = timeStringToInt(totalPauseDuration);
+    const pauseCount = np.length / 2;
+    const pauseDuration = intTotalPauseDuration / pauseCount;
+
+    const totalWorkDuration = minutes - intTotalPauseDuration;
+    const workCount = np.length / 2;
+    const normalDuration = totalWorkDuration / workCount;
+
+    let crtIdx = 0;
+    let crtMin = 0;
+    while (true) {
+      np[crtIdx].startMinute =/*  timeStringToInt(startTime) +  */crtMin;
+      const duration = crtIdx % 2 === 1 ? pauseDuration : normalDuration;
+
+      np[crtIdx].endMinute = np[crtIdx].startMinute + duration;
+
+      // debugger;
+
+      crtMin += duration;
+
+      ++crtIdx;
+      if (crtIdx >= np.length) {
+        break;
+      }
+    }
+
+    setPieces(np.map((x) => ({ ...x })));
+
+    // debugger;
+
+    setOutput(`Done at ${new Date().toLocaleString()}`);
+  });
+
   return (
     <div>
       <label>
@@ -146,51 +194,7 @@ const Form = ({ ...rest }) => {
         }}
         startTime={startTime}
       />
-      <button onClick={() => {
-        if (typeof startTime === 'number' || typeof endTime === 'number') {
-          alert('Error: invalid times selected');
-          return;
-        }
-        const minutes = timeStringToInt(endTime) - timeStringToInt(startTime);
-        setTotalTime(`${(minutes / 60).toString()} h`);
-
-        // const perPiece = minutes / pieces.length;
-
-        const np = [...pieces];
-
-        const intTotalPauseDuration = timeStringToInt(totalPauseDuration);
-        const pauseCount = np.length / 2;
-        const pauseDuration = intTotalPauseDuration / pauseCount;
-
-        const totalWorkDuration = minutes - intTotalPauseDuration;
-        const workCount = np.length / 2;
-        const normalDuration = totalWorkDuration / workCount;
-
-        let crtIdx = 0;
-        let crtMin = 0;
-        while (true) {
-          np[crtIdx].startMinute =/*  timeStringToInt(startTime) +  */crtMin;
-          const duration = crtIdx % 2 === 1 ? pauseDuration : normalDuration;
-
-          np[crtIdx].endMinute = np[crtIdx].startMinute + duration;
-
-          // debugger;
-
-          crtMin += duration;
-
-          ++crtIdx;
-          if (crtIdx >= np.length) {
-            break;
-          }
-        }
-
-        setPieces(np.map((x) => ({ ...x })));
-
-        // debugger;
-
-        setOutput(`Done at ${new Date().toLocaleString()}`);
-      }}
-      >
+      <button onClick={computeTimes}>
         Compute times
       </button>
       <p>

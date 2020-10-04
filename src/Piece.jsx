@@ -10,17 +10,19 @@ const Piece = ({
   return (
     <Segment className="piece">
       {index % 2 === 0 && (
-      <h2>
-        {index / 2 + 1}
-        .
-      </h2>
+        <h2>
+          {index / 2 + 1}
+          .
+        </h2>
       )}
       <Button onClick={doDelete}>&times;</Button>
-      <Button onClick={doMoveUp}>Up</Button>
-      <Button onClick={doMoveDown}>Down</Button>
+      {/* <Button onClick={doMoveUp}>Up</Button>
+      <Button onClick={doMoveDown}>Down</Button> */}
       <p>
         <em>Time:</em>
         {' '}
+        {/* {value.startMinute + ' , ' + startTime} */}
+        {/* <br/> */}
         {value.startMinute > -1 ? intToTimeString(value.startMinute, startTime) : intToTimeString(0, startTime)}
       </p>
 
@@ -49,7 +51,7 @@ const Piece = ({
           >
             Edit
           </Button>
-          <p>{value.text.length > 0 ? value.text : (<em>Empty</em>)}</p>
+          <p>{value.text.length > 0 ? value.text : (<small><em>Empty</em></small>)}</p>
         </>
       )}
     </Segment>
