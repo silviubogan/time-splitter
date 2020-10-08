@@ -2,6 +2,7 @@ import React from 'react';
 import { intToTimeString, timeStringToInt, getCurrentTimeString } from './utils';
 import { Bar } from './Bar';
 import { sound } from './App';
+import { Button } from 'semantic-ui-react'
 
 // TODO: reordering does not work
 export const Form = ({ ...rest }) => {
@@ -128,9 +129,9 @@ export const Form = ({ ...rest }) => {
           localStorage.setItem('data', JSON.stringify(ps));
         }}
         startTime={startTime} />
-      <button onClick={computeTimes}>
+      <Button onClick={computeTimes}>
         Compute times
-      </button>
+      </Button>
       <p>
         <em>{output}</em>
         <br />
