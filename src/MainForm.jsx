@@ -2,10 +2,10 @@ import React from 'react';
 import { intToTimeString, timeStringToInt, getCurrentTimeString } from './utils';
 import { Bar } from './Bar';
 import { sound } from './App';
-import { Button } from 'semantic-ui-react'
+import { Button, Input, Form } from 'semantic-ui-react';
 
 // TODO: reordering does not work
-export const Form = ({ ...rest }) => {
+export const MainForm = ({ ...rest }) => {
   const [startTime, setStartTime] = React.useState(localStorage.getItem('startTime'));
   const [totalPauseDuration, setTotalPauseDuration] = React.useState(localStorage.getItem('totalPauseDuration') || 0);
   const [endTime, setEndTime] = React.useState(localStorage.getItem('endTime'));
@@ -91,37 +91,27 @@ export const Form = ({ ...rest }) => {
   });
 
   return (
-    <div>
-      <label>
-        Start:
-        <input
-          type="time"
-          onChange={(val) => {
-            setStartTime(val.target.value);
-            localStorage.setItem('startTime', val.target.value);
-          }}
-          value={startTime} />
-      </label>
-      <label>
-        End:
-        <input
-          type="time"
+    <Form size="large">
+      <Form.Group widths="equal">
+        <Form.Input fluid label="Start" type="time" value={startTime}
+              onChange={(val) => {
+                setStartTime(val.target.value);
+                localStorage.setItem('startTime', val.target.value);
+              }} />
+        <Form.Input fluid label="End" type="time"
           onChange={(val) => {
             setEndTime(val.target.value);
             localStorage.setItem('endTime', val.target.value);
           }}
           value={endTime} />
-      </label>
-      <label>
-        Total Pause Duration:
-        <input
+        <Form.Input fluid label="Total Pause Duration"
           type="time"
           onChange={(val) => {
             setTotalPauseDuration(val.target.value);
             localStorage.setItem('totalPauseDuration', val.target.value);
           }}
           value={totalPauseDuration} />
-      </label>
+        </Form.Group>
       <Bar
         pieces={pieces}
         onPiecesChange={(ps) => {
@@ -138,6 +128,6 @@ export const Form = ({ ...rest }) => {
         Total time:
         <strong>{totalTime}</strong>
       </p>
-    </div>
+    </Form>
   );
 };

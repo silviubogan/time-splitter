@@ -3,7 +3,8 @@ import React from 'react';
 import './App.css';
 import { Howl, Howler } from 'howler';
 import 'semantic-ui-css/semantic.min.css';
-import { Form } from './Form';
+import { MainForm } from './MainForm';
+import { Button } from 'semantic-ui-react';
 
 export const sound = new Howl({
   src: ['service-bell_daniel_simion.mp3'],
@@ -18,15 +19,15 @@ function App() {
         </h1>
       </header>
       <main>
-        <Form />
+        <MainForm />
       </main>
       <footer>
-        <button onClick={() => {
+        <Button onClick={() => {
           localStorage.clear();
         }}
         >
           Clear all data
-        </button>
+        </Button>
       </footer>
     </div>
   );
