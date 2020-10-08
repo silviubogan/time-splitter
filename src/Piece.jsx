@@ -16,7 +16,6 @@ const Piece = ({
 
   return (
     <Segment className="piece" color={clr} inverted>
-      <header>
         <Grid columns={2}>
           <Grid.Row>
             <Grid.Column>
@@ -34,7 +33,6 @@ const Piece = ({
           </Grid.Row>
         </Grid>
 
-      </header>
       {/* <Button onClick={doMoveUp}>Up</Button>
       <Button onClick={doMoveDown}>Down</Button> */}
       <p>
@@ -63,15 +61,23 @@ const Piece = ({
           />
         </>
       ) : (
-        <>
+        <Grid columns={2}>
+          <Grid.Row>
+            <Grid.Column>
+
+          <p>{value.text.length > 0 ? value.text : (<small className='dimmed'><em>Empty</em></small>)}</p>
+            </Grid.Column>
+            <Grid.Column>
           <Button onClick={() => {
             setEditing(true);
           }}
           >
             Edit
           </Button>
-          <p>{value.text.length > 0 ? value.text : (<small><em>Empty</em></small>)}</p>
-        </>
+            </Grid.Column>
+          </Grid.Row>
+          </Grid>
+
       )}
     </Segment>
   );

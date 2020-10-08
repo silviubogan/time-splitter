@@ -1,5 +1,6 @@
 .App {
   text-align: center;
+  margin: 1rem;
 }
 
 .App-logo {
@@ -45,4 +46,8 @@
 
 .bar {
 
+}
+
+.dimmed {
+  color: gray;
 }
