@@ -2,7 +2,7 @@ import React from 'react';
 import { intToTimeString, timeStringToInt, getCurrentTimeString } from './utils';
 import { Bar } from './Bar';
 import { sound } from './App';
-import { Button, Input, Form } from 'semantic-ui-react';
+import { Button, Input, Form, Message } from 'semantic-ui-react';
 
 // TODO: reordering does not work
 export const MainForm = ({ ...rest }) => {
@@ -90,7 +90,7 @@ export const MainForm = ({ ...rest }) => {
     setOutput(`Done at ${new Date().toLocaleString()}`);
   });
 
-  return (
+  return (<>
     <Form size="large">
       <Form.Group widths="equal">
         <Form.Input fluid label="Start" type="time" value={startTime}
@@ -112,6 +112,7 @@ export const MainForm = ({ ...rest }) => {
           }}
           value={totalPauseDuration} />
         </Form.Group>
+        </Form>
       <Bar
         pieces={pieces}
         onPiecesChange={(ps) => {
@@ -122,12 +123,7 @@ export const MainForm = ({ ...rest }) => {
       <Button onClick={computeTimes}>
         Compute times
       </Button>
-      <p>
-        <em>{output}</em>
-        <br />
-        Total time:
-        <strong>{totalTime}</strong>
-      </p>
-    </Form>
+      <Message success header={output} content={`Total time: ${totalTime}`}/>
+    </>
   );
 };
