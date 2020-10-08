@@ -1,5 +1,5 @@
 import React from 'react';
-import { intToTimeString, timeStringToInt } from './utils';
+import { intToTimeString, timeStringToInt, getCurrentTimeString } from './utils';
 import { Bar } from './Bar';
 import { sound } from './App';
 
@@ -35,11 +35,10 @@ export const Form = ({ ...rest }) => {
       clearInterval(interval.current);
     }
     interval.current = setInterval(() => {
-      const d = new Date();
-      const m = d.getMinutes();
-      const s = d.getSeconds();
+      const cts = getCurrentTimeString();
       pieces.forEach((p, i) => {
-        if (s === 0 && intToTimeString(p.startMinute, startTime) === `${d.getHours()}:${m < 10 ? `0${m}` : m}`) {
+        const s = new Date().getSeconds();
+        if (s === 0 && intToTimeString(p.startMinute, startTime) === cts) {
           sound.play();
           notify(`Hey! ${i % 2 === 1 ? 'Time to open your eyes.' : 'Time to work.'} ${p.text}`);
         }

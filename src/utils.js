@@ -47,3 +47,17 @@ export const intToTimeString = (x, baseTime) => {
 
   return `${h}:${mm}`;
 };
+
+export const getCurrentTimeString = () => {
+  const d = new Date();
+  const m = d.getMinutes();
+  const s = d.getSeconds();
+  return `${d.getHours()}:${m < 10 ? `0${m}` : m}`;
+};
+
+export const compareTimeStrings = (a, b) => {
+  const aa = parseInt(a.replace(':', ''));
+  const bb = parseInt(b.replace(':', ''));
+
+  return aa < bb ? -1 : (a === bb ? 0 : 1);
+};

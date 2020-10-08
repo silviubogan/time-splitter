@@ -1,5 +1,5 @@
 import React from 'react';
-import { intToTimeString, timeStringToInt } from './utils';
+import { intToTimeString, timeStringToInt, getCurrentTimeString, compareTimeStrings } from './utils';
 import { Button, Segment } from 'semantic-ui-react';
 
 const Piece = ({
@@ -7,8 +7,15 @@ const Piece = ({
 }) => {
   const [editing, setEditing] = React.useState(false);
 
+
+  const cts = getCurrentTimeString();
+  const ts = intToTimeString(value.startMinute, startTime);
+
+  const clr = compareTimeStrings(cts, ts) > 0 ? 'black' :
+    compareTimeStrings(cts, ts) === 0 ? 'green' : 'blue';
+
   return (
-    <Segment className="piece">
+    <Segment className="piece" color={clr} inverted>
       {index % 2 === 0 && (
         <h2>
           {index / 2 + 1}
