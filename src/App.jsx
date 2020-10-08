@@ -114,7 +114,10 @@ const Form = ({ ...rest }) => {
     const minutes = timeStringToInt(endTime) - timeStringToInt(startTime);
     setTotalTime(`${(minutes / 60).toString()} h`);
 
-    // const perPiece = minutes / pieces.length;
+    if (pieces.length === 0) {
+      setOutput(`Nothing to do at ${new Date().toLocaleString()}`);
+      return;
+    }
 
     const np = [...pieces];
 
@@ -134,8 +137,6 @@ const Form = ({ ...rest }) => {
 
       np[crtIdx].endMinute = np[crtIdx].startMinute + duration;
 
-      // debugger;
-
       crtMin += duration;
 
       ++crtIdx;
@@ -144,10 +145,7 @@ const Form = ({ ...rest }) => {
       }
     }
 
-    setPieces(np.map((x) => ({ ...x })));
-
-    // debugger;
-
+    setPieces([...np]);
     setOutput(`Done at ${new Date().toLocaleString()}`);
   });
 
