@@ -3,7 +3,9 @@ import { Button, Grid } from 'semantic-ui-react';
 import Piece from './Piece';
 
 export const Bar = ({ pieces, onPiecesChange, startTime }) => (
-  <div>
+  <Grid columns={1}>
+    <Grid.Row>
+      <Grid.Column>
     <Button onClick={() => {
       onPiecesChange([...pieces, { text: '', startMinute: -1 }]);
     }}
@@ -11,7 +13,12 @@ export const Bar = ({ pieces, onPiecesChange, startTime }) => (
       Add new piece
     </Button>
 
-    <Grid columns={4} className="bar">
+
+      </Grid.Column>
+      </Grid.Row>
+      <Grid.Row>
+      <Grid.Column>
+  <Grid columns={4} className="bar">
       {pieces.map((p, i) => {
         // console.log(i, p);;
         return (
@@ -49,5 +56,7 @@ export const Bar = ({ pieces, onPiecesChange, startTime }) => (
         );
       })}
     </Grid>
-  </div>
+      </Grid.Column>
+    </Grid.Row>
+    </Grid>
 );
