@@ -1,6 +1,6 @@
 import React from 'react';
 import { intToTimeString, timeStringToInt, getCurrentTimeString, compareTimeStrings } from './utils';
-import { Button, Segment } from 'semantic-ui-react';
+import { Button, Segment, Input, Grid } from 'semantic-ui-react';
 
 const Piece = ({
   doDelete, doMoveUp, doMoveDown, onChange, value, startTime, index,
@@ -16,13 +16,25 @@ const Piece = ({
 
   return (
     <Segment className="piece" color={clr} inverted>
+      <header>
+        <Grid columns={2}>
+          <Grid.Row>
+            <Grid.Column>
       {index % 2 === 0 && (
         <h2>
           {index / 2 + 1}
           .
         </h2>
       )}
+            </Grid.Column>
+            <Grid.Column>
+
       <Button onClick={doDelete}>&times;</Button>
+            </Grid.Column>
+          </Grid.Row>
+        </Grid>
+
+      </header>
       {/* <Button onClick={doMoveUp}>Up</Button>
       <Button onClick={doMoveDown}>Down</Button> */}
       <p>
@@ -41,7 +53,7 @@ const Piece = ({
           >
             Back
           </Button>
-          <input
+          <Input
             type="text"
             placeholder="Type here..."
             value={value.text}
