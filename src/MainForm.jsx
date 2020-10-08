@@ -7,7 +7,7 @@ import { Button, Input, Form, Message } from 'semantic-ui-react';
 // TODO: reordering does not work
 export const MainForm = ({ ...rest }) => {
   const [startTime, setStartTime] = React.useState(localStorage.getItem('startTime'));
-  const [totalPauseDuration, setTotalPauseDuration] = React.useState(localStorage.getItem('totalPauseDuration') || 0);
+  const [totalPauseDuration, setTotalPauseDuration] = React.useState(localStorage.getItem('totalPauseDuration') || '0:00');
   const [endTime, setEndTime] = React.useState(localStorage.getItem('endTime'));
   const [pieces, setPieces] = React.useState(JSON.parse(localStorage.getItem('data')) || []);
   const [output, setOutput] = React.useState('');
@@ -107,8 +107,8 @@ export const MainForm = ({ ...rest }) => {
         <Form.Input fluid label="Total Pause Duration"
           type="time"
           onChange={(val) => {
-            setTotalPauseDuration(val.target.value);
-            localStorage.setItem('totalPauseDuration', val.target.value);
+            setTotalPauseDuration(val.target.value.toString());
+            localStorage.setItem('totalPauseDuration', val.target.value.toString());
           }}
           value={totalPauseDuration} />
         </Form.Group>
